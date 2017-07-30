@@ -8,11 +8,11 @@ impl <T> Heap<T> {
         return Heap { storage: _storage };
     }
 
-    fn add(&mut self, element: T) {
+    pub fn add(&mut self, element: T) {
         self.storage.push(element);
     }
 
-    fn top(&self) -> Option<&T> {
+    pub fn top(&self) -> Option<&T> {
         return self.storage.get(0);
     }
 }
@@ -27,8 +27,8 @@ mod tests {
         let val: i32 = 42;
 
         heap.add(val.clone());
-        let top = heap.top().expect("Ugh");
+        let top = heap.top();
 
-        assert_eq!(*top, val);
+        assert_eq!(top, Some(&val));
     }
 }
