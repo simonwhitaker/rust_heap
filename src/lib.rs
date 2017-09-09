@@ -56,7 +56,7 @@ mod tests {
         let mut heap: Heap<i32> = Heap::new();
         heap.add(2);
         heap.add(1);
-        let top = heap.top().expect("top returned none");
+        let top = heap.top().expect("top() returned none");
         assert_eq!(*top, 1i32);
     }
 }
