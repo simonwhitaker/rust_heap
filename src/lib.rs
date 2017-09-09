@@ -20,6 +20,15 @@ impl <T:PartialOrd> Heap<T> {
         return self.storage.get(0);
     }
 
+    pub fn remove_first(&mut self) -> Option<T> {
+        if self.storage.len() > 0 {
+            let result = self.storage.swap_remove(0);
+            self.sift_down(0);
+            return Some(result);
+        }
+        return None
+    }
+
     fn sift_up(&mut self, from_index: usize) {
         let mut idx = from_index;
         while idx > 0 {
@@ -28,6 +37,18 @@ impl <T:PartialOrd> Heap<T> {
                 self.storage.swap(idx, pidx);
             }
             idx = pidx;
+        }
+    }
+
+    fn sift_down(&mut self, from_index: usize) {
+        let idx = from_index;
+        for cidx in 2 * idx + 1 .. 2 * idx + 2 {
+            if cidx < self.storage.len() {
+                if self.storage[idx] > self.storage[cidx] {
+                    self.storage.swap(idx, cidx);
+                    self.sift_down(cidx);
+                }
+            }
         }
     }
 }
@@ -54,5 +75,17 @@ mod tests {
         heap.add(1);
         let top = heap.top().expect("top() returned none");
         assert_eq!(*top, 1i32);
+    }
+
+    #[test]
+    fn test_remove_first() {
+        let mut heap: Heap<i32> = Heap::new();
+        heap.add(3);
+        heap.add(2);
+        heap.add(1);
+        assert_eq!(heap.remove_first(), Some(1i32));
+        assert_eq!(heap.remove_first(), Some(2i32));
+        assert_eq!(heap.remove_first(), Some(3i32));
+        assert_eq!(heap.remove_first(), None);
     }
 }
