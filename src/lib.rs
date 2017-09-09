@@ -4,7 +4,7 @@ pub struct Heap<T> {
     storage: Vec<T>,
 }
 
-impl <T:PartialOrd + Copy> Heap<T> {
+impl <T:PartialOrd> Heap<T> {
     pub fn new() -> Self {
         let mut _storage = Vec::new();
         return Heap { storage: _storage };
@@ -22,14 +22,10 @@ impl <T:PartialOrd + Copy> Heap<T> {
 
     fn sift_up(&mut self, from_index: usize) {
         let mut idx = from_index;
-        let mut pidx: usize;
         while idx > 0 {
-            pidx = (idx - 1) / 2;
-            let val = self.storage[idx];
-            let pval = self.storage[pidx];
-            if !(pval < val) {
-                self.storage[pidx] = val;
-                self.storage[idx] = pval;
+            let pidx = (idx - 1) / 2;
+            if self.storage[idx] < self.storage[pidx] {
+                self.storage.swap(idx, pidx);
             }
             idx = pidx;
         }
