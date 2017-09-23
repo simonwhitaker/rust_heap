@@ -10,11 +10,11 @@ pub struct Heap<T> {
 // If T implements PartialOrd, add min_heap and max_heap convenience constructors
 impl <T:PartialOrd> Heap<T> {
     pub fn min_heap() -> Self {
-        return Heap::new(|a, b| a < b);
+        return Heap::new(PartialOrd::lt);
     }
 
     pub fn max_heap() -> Self {
-        return Heap::new(|a, b| a > b);
+        return Heap::new(PartialOrd::gt);
     }
 }
 
