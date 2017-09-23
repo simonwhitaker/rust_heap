@@ -52,17 +52,6 @@ impl <T> Heap<T> {
     }
 
     // Invariant maintainers
-    fn sift_up(&mut self, from_index: usize) {
-        let mut idx = from_index;
-        while idx > 0 {
-            let pidx = (idx - 1) / 2;
-            if (self.comparator)(&self.storage[idx], &self.storage[pidx]) {
-                self.storage.swap(idx, pidx);
-            }
-            idx = pidx;
-        }
-    }
-
     fn sift_down(&mut self, from_index: usize) {
         let idx = from_index;
         for cidx in 2 * idx + 1 .. 2 * idx + 2 {
@@ -72,6 +61,17 @@ impl <T> Heap<T> {
                     self.sift_down(cidx);
                 }
             }
+        }
+    }
+
+    fn sift_up(&mut self, from_index: usize) {
+        let mut idx = from_index;
+        while idx > 0 {
+            let pidx = (idx - 1) / 2;
+            if (self.comparator)(&self.storage[idx], &self.storage[pidx]) {
+                self.storage.swap(idx, pidx);
+            }
+            idx = pidx;
         }
     }
 }
