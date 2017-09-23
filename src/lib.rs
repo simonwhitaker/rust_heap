@@ -1,20 +1,20 @@
 use std::cmp::PartialOrd;
 
-type Comparator<T> = fn(&T, &T) -> bool;
+type Comparator<U> = fn(&U, &U) -> bool;
 
 pub struct Heap<T> {
-
     storage: Vec<T>,
     comparator: Comparator<T>,
 }
 
+// If T implements PartialOrd, add min_heap and max_heap convenience constructors
 impl <T:PartialOrd> Heap<T> {
     pub fn min_heap() -> Self {
-        return Heap::new(|a, b| { a < b });
+        return Heap::new(|a, b| a < b);
     }
 
     pub fn max_heap() -> Self {
-        return Heap::new(|a, b| { a > b });
+        return Heap::new(|a, b| a > b);
     }
 }
 
@@ -27,14 +27,19 @@ impl <T> Heap<T> {
         };
     }
 
+    pub fn top(&self) -> Option<&T> {
+        return self.storage.get(0);
+    }
+
+    pub fn len(&self) -> usize {
+        return self.storage.len();
+    }
+
+    // Public mutators
     pub fn add(&mut self, element: T) {
         self.storage.push(element);
         let max_index = self.storage.len() - 1;
         self.sift_up(max_index);
-    }
-
-    pub fn top(&self) -> Option<&T> {
-        return self.storage.get(0);
     }
 
     pub fn remove_first(&mut self) -> Option<T> {
@@ -46,6 +51,7 @@ impl <T> Heap<T> {
         return None
     }
 
+    // Invariant maintainers
     fn sift_up(&mut self, from_index: usize) {
         let mut idx = from_index;
         while idx > 0 {
@@ -128,5 +134,15 @@ mod tests {
         assert_eq!(heap.remove_first(), Some(2i32));
         assert_eq!(heap.remove_first(), Some(1i32));
         assert_eq!(heap.remove_first(), None);
+    }
+
+    #[test]
+    fn test_len() {
+        let mut heap: Heap<i32> = Heap::min_heap();
+        assert_eq!(heap.len(), 0);
+        heap.add(1);
+        assert_eq!(heap.len(), 1);
+        heap.add(1);
+        assert_eq!(heap.len(), 2);
     }
 }
