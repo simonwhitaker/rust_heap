@@ -8,7 +8,7 @@ pub struct Heap<T> {
 }
 
 // If T implements PartialOrd, add min_heap and max_heap convenience constructors
-impl <T:PartialOrd> Heap<T> {
+impl<T: PartialOrd> Heap<T> {
     pub fn min_heap() -> Self {
         return Heap::new(PartialOrd::lt);
     }
@@ -18,7 +18,7 @@ impl <T:PartialOrd> Heap<T> {
     }
 }
 
-impl <T> Heap<T> {
+impl<T> Heap<T> {
     pub fn new(comparator: Comparator<T>) -> Self {
         let storage = Vec::new();
         return Heap {
@@ -48,13 +48,13 @@ impl <T> Heap<T> {
             self.sift_down(0);
             return Some(result);
         }
-        return None
+        return None;
     }
 
     // Invariant maintainers
     fn sift_down(&mut self, from_index: usize) {
         let idx = from_index;
-        for cidx in 2 * idx + 1 .. 2 * idx + 2 {
+        for cidx in 2 * idx + 1..2 * idx + 2 {
             if cidx < self.storage.len() {
                 if (self.comparator)(&self.storage[cidx], &self.storage[idx]) {
                     self.storage.swap(idx, cidx);
